@@ -12,13 +12,13 @@ const { default: thunk } = require("redux-thunk");
 const GET_TODOS_REQUEST = "GET_TODOS_REQUEST";
 const GET_TODOS_SUCCESS = "GET_TODOS_SUCCESS";
 const GET_TODOS_FAILED = "GET_TODOS_FAILED";
-const API_URL = "https://jsonplaceholder.typicode.com/todos";
+const API_URL = "https://jsonplaceholder.typicode.com/todo";
 
 // states
 const initialTodosState = {
-    todos:[],
     isLoading:false,
     error:null,
+    todos:[],
 };
 
 // actions
@@ -72,10 +72,12 @@ const fetchData = () => {
         dispatch(getTodosRequest());
         axios.get(API_URL)
         .then(res => {
-            console.log(res.data);
+            const titles = res.data.map(todo => todo.title);
+            dispatch(getTodosSuccess(titles));
         })
         .catch(error => {
-            console.log(error.message);
+            const errorMessage = (error.message);
+            dispatch(getTodosFailed(errorMessage));
         });
     }
 }
